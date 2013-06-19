@@ -1,7 +1,7 @@
 # 文字コードの設定
 export LANG=ja_JP.UTF-8
 
-# パスの設定
+# パスの設定 更新テスト
 #export PATH=/usr/local/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:/opt/local/android-sdk/tools:/opt/jruby/bin:$HOME/bin:$PATH
 export MANPATH=/opt/local/man:$MANPATH
 
