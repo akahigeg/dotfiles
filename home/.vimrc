@@ -106,7 +106,7 @@ set wildmenu
 " テキスト挿入中の自動折り返しを日本語に対応させる
 set formatoptions+=mM
 " 日本語整形スクリプト(by. 西岡拓洋さん)用の設定
-let format_allow_over_tw = 1	" ぶら下り可能幅
+let format_allow_over_tw = 1  " ぶら下り可能幅
 
 set iminsert=0 imsearch=0
 inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
@@ -202,6 +202,7 @@ set visualbell t_vb=
 " キーマップのカスタマイズ
 map <F2> :tabp<ENTER>
 map <F3> :tabn<ENTER>
+map <F4> <C-w>w
 map <F7> zf%
 map <F8> zo
 imap <C-o> <C-x><C-k>
@@ -232,6 +233,8 @@ au BufNewFile,BufRead *.coffee set ft=coffee       fenc=utf-8
 au FileType ruby  :set nowrap tabstop=2 tw=0 sw=2 expandtab
 au FileType eruby :set nowrap tabstop=2 tw=0 sw=2 expandtab
 au FileType objc  :set nowrap tabstop=2 tw=0 sw=2 expandtab
+au FileType python :set nowrap tabstop=4 tw=0 sw=4 expandtab
+au FileType markdown :set tabstop=4 tw=0 sw=4 expandtab
 
 autocmd BufNewFile *.rb 0r ~/.vim/templates/rb.tpl
 
@@ -243,18 +246,16 @@ au BufNewFile,BufRead *.rb    set ft=ruby  fenc=utf-8
 
 "------------------------------------------------------------------------
 " rails
-au BufNewFile,BufRead app/*/*.rhtml	set ft=mason fenc=utf-8
-au BufNewFile,BufRead app/*/*.erb	set ft=mason fenc=utf-8
-au BufNewFile,BufRead app/**/*.rb	set ft=ruby  fenc=utf-8
-
-" tdiary
-let tdiary_site1_url = "http://www.teketou.net/higelog/"
-let tdiary_use_netrc = 1
+au BufNewFile,BufRead app/*/*.rhtml  set ft=mason fenc=utf-8
+au BufNewFile,BufRead app/*/*.erb  set ft=mason fenc=utf-8
+au BufNewFile,BufRead app/**/*.rb  set ft=ruby  fenc=utf-8
 
 " objc objj
-au BufNewFile,BufRead *.j	set ft=objc  fenc=utf-8
-au BufNewFile,BufRead *.m	set ft=objc  fenc=utf-8
-au BufNewFile,BufRead *.h	set ft=objc  fenc=utf-8
+au BufNewFile,BufRead *.j  set ft=objc  fenc=utf-8
+au BufNewFile,BufRead *.m  set ft=objc  fenc=utf-8
+au BufNewFile,BufRead *.h  set ft=objc  fenc=utf-8
+
+au BufNewFile,BufRead *.md  set ft=markdown  fenc=utf-8
 
 "set complete+=k~/.vim/keyword/objc_keyword
 autocmd FileType objc setlocal iskeyword+=:
@@ -263,9 +264,6 @@ autocmd FileType objc set dictionary=~/.vim/dict/cocoa.dict
 " php
 au FileType php :set nowrap tabstop=2 tw=0 sw=2 expandtab
 au BufNewFile,BufRead *.php    set ft=  fenc=utf-8
-
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags() 
 
 " Align 日本語環境対応
 let g:Align_xstrlen = 3
@@ -292,7 +290,192 @@ match ZenkakuSpace /　/
 " 対応括弧のハイライトをしない
 let loaded_matchparen = 1
 
+" スワップファイルいらない
 set noswapfile
 
-" nnoremap : ;
-" nnoremap ; :
+" project.vim ※タブでは使えない
+"if getcwd() != $HOME
+"  if filereadable(getcwd(). '/.vimprojects')
+"    Project .vimprojects
+"  endif
+"endif
+
+" 全角文字ハイライト
+scriptencoding utf-8
+
+augroup highlightIdegraphicSpace
+  autocmd!
+  autocmd ColorScheme * highlight IdeographicSpace term=underline ctermbg=DarkGreen guibg=DarkGreen
+  autocmd VimEnter,WinEnter * match IdeographicSpace /　/
+augroup END
+
+colorscheme default
+
+" YankRing
+:nnoremap <silent> <F7> :YRShow<CR>
+:let g:yankring_max_history = 10
+:let g:yankring_window_height = 13
+
+" Dash
+function! s:dash(...)
+  let ft = &filetype
+  if &filetype == 'python'
+    let ft = ft.'2'
+  endif
+  let ft = ''
+  let word = len(a:000) == 0 ? input('Dash search: ', ft.expand('<cword>')) : ft.join(a:000, ' ')
+  call system(printf("open dash://'%s'", word))
+endfunction
+command! -nargs=* Dash call <SID>dash(<f-args>)
+
+"
+" NeoBundle
+"
+set nocompatible               " Be iMproved
+
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+call neobundle#rc(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Recommended to install
+" After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
+" NeoBundle 'Shougo/vimproc'
+
+" My Bundles here:
+"
+" Note: You don't set neobundle setting in .gvimrc!
+" Original repos on github
+" NeoBundle 'tpope/vim-fugitive'
+" NeoBundle 'Lokaltog/vim-easymotion'
+" NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+" vim-scripts repos
+" NeoBundle 'L9'
+" NeoBundle 'FuzzyFinder'
+NeoBundle 'rails.vim'
+" Non github repos
+" NeoBundle 'git://git.wincent.com/command-t.git'
+" Non git repos
+" NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
+" NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
+"
+
+filetype plugin indent on     " Required!
+"
+" Brief help
+" :NeoBundleList          - list configured bundles
+" :NeoBundleInstall(!)    - install(update) bundles
+" :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+
+" neobundle"{{{
+" コマンドを伴うやつの遅延読み込み
+"bundle"{{{
+" その他 {{{
+NeoBundle 'Shougo/vimproc', {
+      \ 'build' : {
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ }
+NeoBundle 'taichouchou2/vim-endwise.git', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ } }
+" }}}
+
+" 補完 {{{
+NeoBundle 'Shougo/neocomplcache', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }}
+NeoBundle 'Shougo/neosnippet', {
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }}
+
+NeoBundle 'Shougo/neocomplcache-rsense', {
+      \ 'depends': 'Shougo/neocomplcache',
+      \ 'autoload': { 'filetypes': 'ruby' }}
+NeoBundle 'taichouchou2/rsense-0.3', {
+      \ 'build' : {
+      \    'mac': 'ruby etc/config.rb > ~/.rsense',
+      \    'unix': 'ruby etc/config.rb > ~/.rsense',
+      \ } }
+" }}}
+
+" 便利 {{{
+" 範囲指定のコマンドが使えないので、tcommentのLazy化はNeoBundleのアップデートを待ちましょう...
+NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'tpope/vim-surround', {
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['nx', '<Plug>Dsurround'], ['nx', '<Plug>Csurround'],
+      \     ['nx', '<Plug>Ysurround'], ['nx', '<Plug>YSurround'],
+      \     ['nx', '<Plug>Yssurround'], ['nx', '<Plug>YSsurround'],
+      \     ['nx', '<Plug>YSsurround'], ['vx', '<Plug>VgSurround'],
+      \     ['vx', '<Plug>VSurround']
+      \ ]}}
+" }}}
+
+" ruby / railsサポート {{{
+NeoBundle 'tpope/vim-rails'
+NeoBundle 'ujihisa/unite-rake', {
+      \ 'depends' : 'Shougo/unite.vim' }
+NeoBundle 'basyura/unite-rails', {
+      \ 'depends' : 'Shjkougo/unite.vim' }
+NeoBundle 'taichouchou2/unite-rails_best_practices', {
+      \ 'depends' : 'Shougo/unite.vim',
+      \ 'build' : {
+      \    'mac': 'gem install rails_best_practices',
+      \    'unix': 'gem install rails_best_practices',
+      \   }
+      \ }
+NeoBundle 'taichouchou2/unite-reek', {
+      \ 'build' : {
+      \    'mac': 'gem install reek',
+      \    'unix': 'gem install reek',
+      \ },
+      \ 'autoload': { 'filetypes': ['ruby', 'eruby', 'haml'] },
+      \ 'depends' : 'Shougo/unite.vim' }
+NeoBundle 'taichouchou2/alpaca_complete', {
+      \ 'depends' : 'tpope/vim-rails',
+      \ 'build' : {
+      \    'mac':  'gem install alpaca_complete',
+      \    'unix': 'gem install alpaca_complete',
+      \   }
+      \ }
+
+let s:bundle_rails = 'unite-rails unite-rails_best_practices unite-rake alpaca_complete'
+
+function! s:bundleLoadDepends(bundle_names) "{{{
+  " bundleの読み込み
+  execute 'NeoBundleSource '.a:bundle_names
+  au! RailsLazyPlugins
+endfunction"}}}
+aug RailsLazyPlugins
+  au User Rails call <SID>bundleLoadDepends(s:bundle_rails)
+aug END
+
+" reference環境
+NeoBundle 'vim-ruby/vim-ruby', {
+    \ 'autoload' : { 'filetypes': ['ruby', 'eruby', 'haml'] } }
+NeoBundle 'taka84u9/vim-ref-ri', {
+      \ 'depends': ['Shougo/unite.vim', 'thinca/vim-ref'],
+      \ 'autoload': { 'filetypes': ['ruby', 'eruby', 'haml'] } }
+NeoBundle 'skwp/vim-rspec', {
+      \ 'autoload': { 'filetypes': ['ruby', 'eruby', 'haml'] } }
+NeoBundle 'ruby-matchit', {
+    \ 'autoload' : { 'filetypes': ['ruby', 'eruby', 'haml'] } }
+" }}}
+
+" }}}
+"}}}
+
+NeoBundle 'git://github.com/mattn/zencoding-vim.git'
+
+" Installation check.
+NeoBundleCheck

@@ -5,6 +5,7 @@ vbell off
 bind w windowlist -b
 hardstatus alwayslastline I%wI
 defhstatus I^En:^EtI
-# shell -$SHELL
+shell -$SHELL
 startup_message off
 autodetach on
+termcapinfo xterm* ti@:te@

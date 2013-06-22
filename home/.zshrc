@@ -1,32 +1,29 @@
 # 文字コードの設定
 export LANG=ja_JP.UTF-8
 
-# パスの設定 更新テスト
-#export PATH=/usr/local/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:/opt/local/android-sdk/tools:/opt/jruby/bin:$HOME/bin:$PATH
+# パスの設定
+export PATH=$HOME/bin:$HOME/.cabal/bin:/usr/local/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:/opt/local/android-sdk/tools:/opt/jruby/bin:/opt/local/scala/bin:$HOME/bin/AWS-ElasticBeanstalk-CLI-2.3.1/eb/linux/python2.7:$PATH
 export MANPATH=/opt/local/man:$MANPATH
-
-#if [ -d $HOME/.rbenv/bin ]; then
-#    export RBENV_ROOT=$HOME/.rbenv
-#    export PATH="$RBENV_ROOT/bin:$PATH"
-#    eval "$(rbenv init -)"
-#fi
 
 # 関数
 find-grep () { find . -type f -print | xargs grep -n --binary-files=without-match $@ }
 
 # エイリアスの設定
-alias ls='ls'
-alias ll='ls -la'
-alias mysql='mysql5'
 alias g='git'
-alias ga='git add'
 alias gs='git status'
-alias go='git checkout'
-alias gb='git branch'
-alias gm='git merge'
-alias gp='git push'
 alias gc='git commit -a -m'
 alias gnow='git commit -a -m "."'
+alias gp='git push'
+alias ga='git add'
+alias go='git checkout'
+alias gb='git branch'
+alias gl='git log'
+alias ls='ls -a'
+alias ll='ls -la'
+alias mysql='mysql5'
+alias chrome='open -a "Google Chrome"'
+
+alias b='bundle'
 alias be='bundle exec'
 alias bi='bundle install'
 
@@ -126,4 +123,9 @@ export SVN_EDITOR=/usr/bin/vi
 export CLASSPATH=/opt/local/scala-2.8.0.final/lib/scala-library.jar
 
 # rvm
-# [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
