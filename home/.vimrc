@@ -235,6 +235,7 @@ au FileType eruby :set nowrap tabstop=2 tw=0 sw=2 expandtab
 au FileType objc  :set nowrap tabstop=2 tw=0 sw=2 expandtab
 au FileType python :set nowrap tabstop=4 tw=0 sw=4 expandtab
 au FileType markdown :set tabstop=4 tw=0 sw=4 expandtab
+au FileType text :set tabstop=4 tw=0 sw=4 expandtab
 
 autocmd BufNewFile *.rb 0r ~/.vim/templates/rb.tpl
 
@@ -479,3 +480,11 @@ NeoBundle 'git://github.com/mattn/zencoding-vim.git'
 
 " Installation check.
 NeoBundleCheck
+
+" Evervim
+"
+"NeoBundle 'kakkyz81/evervim'
+"let g:evervim_devtoken='S=s11:U=12a19c:E=146c783c729:C=13f6fd29b2c:P=1cd:A=en-devtoken:V=2:H=e5dbdecfed579bad20736cd974614e71'
+"map <C-e> :EvervimNotebookList<CR>
+"command Evnew :EvervimCreateNote
+"command Evtag :EvervimListTags
