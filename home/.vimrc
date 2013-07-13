@@ -234,8 +234,8 @@ au FileType ruby  :set nowrap tabstop=2 tw=0 sw=2 expandtab
 au FileType eruby :set nowrap tabstop=2 tw=0 sw=2 expandtab
 au FileType objc  :set nowrap tabstop=2 tw=0 sw=2 expandtab
 au FileType python :set nowrap tabstop=4 tw=0 sw=4 expandtab
-au FileType markdown :set tabstop=4 tw=0 sw=4 expandtab syntax=no
-au FileType text :set tabstop=4 tw=0 sw=4 expandtab
+au FileType markdown :set wrap tabstop=4 tw=0 sw=4 expandtab syntax=no
+au FileType text :set wrap tabstop=4 tw=0 sw=4 expandtab
 
 autocmd BufNewFile *.rb 0r ~/.vim/templates/rb.tpl
 
@@ -477,6 +477,7 @@ NeoBundle 'ruby-matchit', {
 "}}}
 
 NeoBundle 'git://github.com/mattn/zencoding-vim.git'
+NeoBundle 'Align'
 
 " Installation check.
 NeoBundleCheck
